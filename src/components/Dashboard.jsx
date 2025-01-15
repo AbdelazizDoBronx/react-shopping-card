@@ -12,6 +12,8 @@ const Dashboard = () => {
 
   const {products} = useSelector((state) => state.products)
 
+ 
+
   return (
     <div className="max-w-[1600px] mx-auto px-4 py-8">
       <Link to='/cart'>
@@ -21,7 +23,7 @@ const Dashboard = () => {
         Welcome to our online store
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-        {products?.map((product, idx) => (
+        {products.map((product, idx) => (
           <div
             key={idx}
             className="rounded-md border shadow-lg overflow-hidden transition-transform duration-300 transform hover:scale-105"

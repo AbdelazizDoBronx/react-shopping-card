@@ -24,7 +24,8 @@ const productsReducer = createSlice({
                 "rating": {
                   "rate": 3.9,
                   "count": 120
-                }
+                },
+                "qte":0
               },
               {
                 "id": "2",
@@ -36,7 +37,8 @@ const productsReducer = createSlice({
                 "rating": {
                   "rate": 4.1,
                   "count": 259
-                }
+                },
+                "qte":0
               },
               {
                 "id": "3",
@@ -48,7 +50,8 @@ const productsReducer = createSlice({
                 "rating": {
                   "rate": 4.7,
                   "count": 500
-                }
+                },
+                "qte":0
               }
         ],
         status : "idle",
@@ -57,15 +60,31 @@ const productsReducer = createSlice({
      },
      reducers : {
         addToCart : (state,action)=>{
-            const productId = action.payload.id;
-            const isProductExist = state.cart.findIndex((prod)=>productId)
-            if(isProductExist == -1){
-                state.cart.push(action.payload)
-            }
+          const productId = action.payload.id;
+          const isProductExist = state.cart.findIndex((prod)=>prod.id === productId)
+          if(isProductExist !== -1){
+              state.cart[isProductExist].qte +=1
+          }else{
+            state.cart.push({...action.payload,qte:1})
+          }
         },
         deleteFromCart : (state,action) => {
             const productId = action.payload
             state.cart = state.cart.filter(product => product.id !== productId)
+        },
+        handleQteInc : (state,action) => {
+            const selectedItemId = action.payload;
+            const isProductExist = state.cart.findIndex((prod)=>prod.id === selectedItemId)
+            if(selectedItemId !== -1){
+              state.cart[isProductExist].qte +=1
+            }
+        },
+        handleQteDec : (state,action)=> {
+          const selectedItemId = action.payload;
+            const isProductExist = state.cart.findIndex((prod)=>prod.id === selectedItemId)
+            if(selectedItemId !== -1 && state.cart[isProductExist].qte > 0){
+              state.cart[isProductExist].qte -=1
+            }
         }
      }
 
@@ -86,6 +105,6 @@ const productsReducer = createSlice({
 })
 
 
-export const {addToCart,deleteFromCart} = productsReducer.actions
+export const {addToCart,deleteFromCart,handleQteInc,handleQteDec} = productsReducer.actions
 
 export default productsReducer.reducer
